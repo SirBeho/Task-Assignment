@@ -32,7 +32,7 @@ export default function EditUser({ roles, changeRol, hideModal, update, selected
             <div className='flex gap-8'>
                 <div className="flex flex-col w-2/4">
                     <label htmlFor="rol_id" className="text-xs">
-                        Asignar Rol
+                        Asigna
                     </label>
 
                     <select name="rol_id" id="rol_id" className="w-full p-1 bg-white rounded-md outline-none"

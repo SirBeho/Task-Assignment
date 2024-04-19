@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
   const [currentData, setCurrentData] = useState(Tasktypes);
   const [modalDestroy, setModalDestroy] = useState(false)
+  const [Modalsee, setModalsee] = useState(false)
   const [newTipoSilicitud, setNewTipoSilicitud] = useState(false)
   const [editTipoSilicitud, setEditTipoSilicitud] = useState(false)
   const [TaskTypeData, setTaskTypeData] = useState();
@@ -31,42 +32,15 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
   }, [msj]);
 
   useEffect(() => {
+   
     if (Tasktypes) {
-      const dataList = Tasktypes.map(TaskType => {
-
-        delete TaskType.created_at;
-        delete TaskType.updated_at;
-
-
-        if (TaskType.tipo === 1) {
-          TaskType['categoria'] = 'Servicios';
-
-          return TaskType;
-        }
-        if (TaskType.tipo === 2) {
-          TaskType['categoria'] = 'Certificaciones';
-
-          return TaskType;
-        }
-        if (TaskType.tipo === 3) {
-          TaskType['categoria'] = 'Estados Financieros';
-
-          return TaskType;
-        }
-        if (TaskType.tipo === 4) {
-          TaskType['categoria'] = 'Reportes Generales';
-
-          return TaskType;
-        }
-
-      })
-      setCurrentData(dataList);
+      setCurrentData(Tasktypes);
     }
   }, [Tasktypes]);
 
   const tbStructure = {
-    'Tipo de Task': 'name',
-    'Categoria': 'categoria',
+    'Tipo de Task': 'type_name',
+    'Tiempo Estimado': 'estimated_time',
     'Status': 'status'
   }
 
@@ -78,6 +52,12 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
   const deleteModal = (id) => {
     getTaskTypeData(id)
     setModalDestroy(true)
+
+  }
+
+  const seeModal = (id) => {
+    getTaskTypeData(id)
+    setModalsee(true);
 
   }
 
@@ -111,10 +91,10 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
       <div className="container mx-auto px-4 sm:px-8">
        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500   mt-8 ">
              <li className="me-2">
-              <Link href={route('empresa.index')}className={`inline-block p-4 rounded-t-lg ${empresa ? 'activeTab': 'NoactiveTab'}`}>Empresa</Link>
+              <Link href={route('empresa.index')}className={`inline-block p-4 rounded-t-lg ${empresa ? 'activeTab': 'NoactiveTab'}`}>Configuracion</Link>
             </li>
             <li className="me-2">
-              <Link href={route('TaskType.index')} aria-current="page" className={` inline-block p-4 rounded-t-lg    ${Tasktypes ? 'activeTab' : 'NoactiveTab'}`}>Tasks</Link>
+              <Link href={route('TaskType.index')} aria-current="page" className={` inline-block p-4 rounded-t-lg    ${Tasktypes ? 'activeTab' : 'NoactiveTab'}`}>Servicios</Link>
             </li>
 
             
@@ -129,6 +109,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
               onNew={() => setNewTipoSilicitud(true)}
               onUpdate={editModal}
               onDelete={deleteModal}
+              onSee={seeModal}
 
             />
           }
@@ -141,7 +122,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
             />
           }
 
-          {editTipoSilicitud &&
+          {/* {editTipoSilicitud &&
             <EditTaskType
               show={editTipoSilicitud}
               TaskTypeData={TaskTypeData}
@@ -149,7 +130,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
               setLoading={setLoading}
             />
           }
-
+ */}
           <SuccessAlert
             hideModal={() => setSuccesAlert(false)}
             show={succesAlert}
@@ -160,6 +141,31 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
               <Loading />
             </Modal>
           }
+
+        <Modal show={Modalsee} onClose={() =>setModalsee(false)}>
+          <div className='flex gap-5'>
+                <div className="bg-white p-4 rounded-lg">
+                  <h2 className="text-2xl font-semibold text-gray-800">Detalles</h2>
+                  <div className="mt-4">
+                    <p className="text-gray-800 text-lg font-semibold">Tipo de Task: <span className="text-gray-500">{TaskTypeData?.type_name}</span></p>
+                    <p className="text-gray-800 text-lg font-semibold">Tiempo Estimado: <span className="text-gray-500">{TaskTypeData?.estimated_time}</span></p>
+                    <p className="text-gray-800 text-lg font-semibold">Status: <span className="text-gray-500">{TaskTypeData?.status}</span></p>
+                  </div>
+                </div>
+                <div className="bg-white p-4 rounded-lg">
+                  <h2 className="text-2xl font-semibold text-gray-800">Habilidades</h2>
+                  <div className="mt-4">
+                    <p className="text-gray-800 text-lg font-semibold">PHP: <span className="text-gray-500">{TaskTypeData?.requisitos[0].level}</span></p>
+                    <p className="text-gray-800 text-lg font-semibold">Java Scrip: <span className="text-gray-500">{TaskTypeData?.requisitos[1].level}</span></p>
+                    <p className="text-gray-800 text-lg font-semibold">SQL: <span className="text-gray-500">{TaskTypeData?.requisitos[2].level}</span></p>
+                  </div>
+                </div>
+
+                </div>
+
+
+          </Modal>
+
 
           <Modal show={modalDestroy}>
             <DeleteUser

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Http;
 
 class TaskController extends Controller
 {
@@ -27,24 +28,35 @@ class TaskController extends Controller
     public function index()
     {
         $mensaje = session('msj');
+        $resultado = session('resultado');
+
         if ($mensaje) {
             Session::forget('msj');
         }
-        return Inertia::render('Tasks/Index', [
-            'tipos' => TaskType::where('status', '1')->get(),
-            'prioridades' => Priority::where('status', '1')->get(),
 
+        if ($resultado) {
+            Session::forget('resultado');
+        }
+
+        return Inertia::render('Tasks/Index', [
+            'tipos' => TaskType::where('status', '1')->get()->load('requisitos'),
+            'prioridades' => Priority::where('status', '1')->get(),
+            'resultado' => $resultado,
             'msj' => $mensaje,
+            'users' => User::all(),
+
         ]);
     }
 
     public function administracion(Request $request)
-    {
+    {   
+       
+       
         $mensaje = session('msj');
         $Task_id = session('Task_id');
 
         $Task_id && session()->forget('Task_id');
-
+       
         if (!$Task_id) {
             $Task_id =  $request->id;
         }
@@ -71,6 +83,41 @@ class TaskController extends Controller
             'clientes' => User::where("rol_id", 2)->get(),
 
         ]);
+    }
+    public function modelo(Request $request)
+    {
+        $usuarios = User::where("rol_id", 1)->get()->load('skills');
+        $requisitos = array_map('intval', $request->input('requisitos'));
+
+       
+        
+        $data = [];
+
+        foreach ($usuarios as $usuario) {
+            $habilidades = [];
+            foreach ($usuario['skills'] as $skill) {
+                $habilidades[] = $skill['level'];
+            }
+            $data[] = [
+                'id' => $usuario['id'],
+                'habilidades' => $habilidades
+            ];
+        }    
+        
+    
+        // Enviar los datos a un script de Python
+        $response = Http::post('http://127.0.0.1:5000/calcular-exito', [
+            'usuarios' => $data,
+            'requisitos' => $requisitos,
+        ]);
+
+
+        // Obtener los resultados de vuelta del script de Python
+        $resultados = $response->json();
+
+       
+        return response()->json($resultados);
+       
     }
 
     public function create(Request $request)

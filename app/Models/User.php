@@ -65,6 +65,10 @@ class User extends Authenticatable
         return $this->BelongsTo(Rol::class)->select('id', 'name');
     }
 
+    public function skills(): HasMany
+    {
+        return $this->hasMany(UserSkill::class,'user_id');
+    }
     
 
 }

@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use App\Models\TaskType;
 
 class EmpresaController extends Controller
 {
@@ -19,10 +20,11 @@ class EmpresaController extends Controller
             Session::forget('msj');
         }
 
-        $empresa =  Empresa::find(1);
+        $empresa =  null;
 
         return Inertia::render('Mantenimiento/Index', [
-            'empresa' => $empresa,
+            'Tasktypes' => TaskType::where('status', '1')->get()->load('requisitos'),
+            'empresa' => null,
             'msj' => $mensaje
         ]);
     }
