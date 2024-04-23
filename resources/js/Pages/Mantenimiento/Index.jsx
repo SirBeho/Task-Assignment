@@ -2,7 +2,8 @@
 import { DataTable } from '@/Components/DataTable';
 import DeleteUser from '@/Components/DeleteUser';
 import { EditTaskType } from '@/Components/EditTaskType';
-import Empresa from '@/Components/Empresa';
+import ListSkills from '@/Components/ListSkills';
+import Config from '@/Components/Config';
 import Loading from '@/Components/Loading';
 import Modal from '@/Components/Modal';
 import { NewTaskType } from '@/Components/NewTaskType';
@@ -13,7 +14,11 @@ import { useEffect, useState } from 'react';
 
 
 
-export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
+export default function Mantenimiento({ auth, Tasktypes, msj, config ,skills}) {
+
+
+  const  [menu, setMenu] = useState(0);
+
   const [currentData, setCurrentData] = useState(Tasktypes);
   const [modalDestroy, setModalDestroy] = useState(false)
   const [Modalsee, setModalsee] = useState(false)
@@ -34,6 +39,12 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
   useEffect(() => {
    
     if (Tasktypes) {
+
+      Tasktypes.map((TaskType) => {
+        TaskType.requisito = TaskType.requisitos.map(item => {
+          return `${item.skill.skill_name}:${item.level}`;
+        }).join(',  ');
+      });
       setCurrentData(Tasktypes);
     }
   }, [Tasktypes]);
@@ -41,8 +52,10 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
   const tbStructure = {
     'Tipo de Task': 'type_name',
     'Tiempo Estimado': 'estimated_time',
+    'Requerimiento': 'requisito',
     'Status': 'status'
   }
+
 
   function getTaskTypeData(id) {
     const data = Tasktypes.filter(TaskType => TaskType.id === id);
@@ -91,17 +104,26 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
       <div className="container mx-auto px-4 sm:px-8">
        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500   mt-8 ">
              <li className="me-2">
-              <Link href={route('empresa.index')}className={`inline-block p-4 rounded-t-lg ${empresa ? 'activeTab': 'NoactiveTab'}`}>Configuracion</Link>
+              <button onClick={() => setMenu(0)} className={`inline-block p-4 rounded-t-lg ${menu == 0 ? 'activeTab': 'NoactiveTab'}`} > Configuracion</button>
             </li>
             <li className="me-2">
-              <Link href={route('TaskType.index')} aria-current="page" className={` inline-block p-4 rounded-t-lg    ${Tasktypes ? 'activeTab' : 'NoactiveTab'}`}>Servicios</Link>
+              <button onClick={() => setMenu(1)} className={`inline-block p-4 rounded-t-lg ${menu == 1 ? 'activeTab': 'NoactiveTab'}`} > Tipo de Tareas</button>
             </li>
 
             
           </ul>
         <div className="mb-8 bg-gray-300 rounded-xl rounded-tl-none  p-2">
 
-          {currentData &&
+
+          {menu == 0 && 
+            <Config
+              config={config}
+              setLoading={setLoading}
+            />
+
+          }
+
+          {menu == 1 &&
             <DataTable
               data={currentData}
               action={true}
@@ -110,7 +132,6 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
               onUpdate={editModal}
               onDelete={deleteModal}
               onSee={seeModal}
-
             />
           }
 
@@ -122,15 +143,16 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
             />
           }
 
-          {/* {editTipoSilicitud &&
+           {editTipoSilicitud &&
             <EditTaskType
               show={editTipoSilicitud}
               TaskTypeData={TaskTypeData}
               hideModal={() => setEditTipoSilicitud(false)}
               setLoading={setLoading}
+              skills={skills}
             />
           }
- */}
+ 
           <SuccessAlert
             hideModal={() => setSuccesAlert(false)}
             show={succesAlert}
@@ -143,22 +165,20 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
           }
 
         <Modal show={Modalsee} onClose={() =>setModalsee(false)}>
-          <div className='flex gap-5'>
-                <div className="bg-white p-4 rounded-lg">
-                  <h2 className="text-2xl font-semibold text-gray-800">Detalles</h2>
-                  <div className="mt-4">
-                    <p className="text-gray-800 text-lg font-semibold">Tipo de Task: <span className="text-gray-500">{TaskTypeData?.type_name}</span></p>
-                    <p className="text-gray-800 text-lg font-semibold">Tiempo Estimado: <span className="text-gray-500">{TaskTypeData?.estimated_time}</span></p>
-                    <p className="text-gray-800 text-lg font-semibold">Status: <span className="text-gray-500">{TaskTypeData?.status}</span></p>
+          <div className='flex gap-1'>
+                <div className="bg-white rounded-lg w-1/2">
+                  <h2 className="text-2xl font-semibold text-gray-800 ">Detalles</h2>
+                  <div className="mt-4 text-gray-800 font-bold text-lg">
+                    <p >Tarea: <span className="text-gray-500">{TaskTypeData?.type_name}</span></p>
+                    <p  >Tiempo Estimado: <span className="text-gray-500">{TaskTypeData?.estimated_time}</span></p>
+                    <p>Descripcion : <span className="text-gray-500">{TaskTypeData?.description}</span></p>
+                    <p >Status: <span className="text-gray-500">{TaskTypeData?.status ? "Activo" : "Inactivo"}</span></p>
                   </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg">
-                  <h2 className="text-2xl font-semibold text-gray-800">Habilidades</h2>
-                  <div className="mt-4">
-                    <p className="text-gray-800 text-lg font-semibold">PHP: <span className="text-gray-500">{TaskTypeData?.requisitos[0].level}</span></p>
-                    <p className="text-gray-800 text-lg font-semibold">Java Scrip: <span className="text-gray-500">{TaskTypeData?.requisitos[1].level}</span></p>
-                    <p className="text-gray-800 text-lg font-semibold">SQL: <span className="text-gray-500">{TaskTypeData?.requisitos[2].level}</span></p>
-                  </div>
+                <div className="bg-white p-4 rounded-lg w-1/2">
+                  <ListSkills
+                    selectedSkills={TaskTypeData?.requisitos}
+                  />
                 </div>
 
                 </div>
@@ -176,13 +196,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, empresa }) {
 
           </Modal>
           
-          {empresa && 
-            <Empresa
-              empresa={empresa}
-              setLoading={setLoading}
-            />
-
-          }
+          
 
         </div>
 

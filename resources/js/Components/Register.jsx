@@ -63,7 +63,7 @@ export default function Register({ roles, setData, isCliente, data, submit, chan
                     <div className='flex gap-8'>
                         <div className="flex flex-col w-2/4">
                             <label htmlFor="name" className="text-xs">
-                                Empresa
+                                Config //espresa
                             </label>
                             <input type="text" name="name" id="name" className="h-9 rounded-md outline-none px-2" onChange={(e) => setData('empresa', e.target.value)}/>
                         </div>

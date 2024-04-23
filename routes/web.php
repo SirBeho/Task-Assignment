@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ComentarioController;
-use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\ProfileController;
@@ -12,7 +12,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTypeController;
-use App\Models\Empresa;
+use App\Models\Config;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -70,33 +70,36 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-        Route::get('/configuracion/empresa', [EmpresaController::class, 'index'])->name('empresa.index');
-        Route::post('/configuracion/empresa/{id}', [EmpresaController::class, 'update'])->name('empresa.update');
+        Route::get('/configuracion/servicios', [ConfigController::class, 'index'])->name('config.index');
+        Route::post('/configuracion/empresa/{id}', [ConfigController::class, 'update'])->name('config.update');
+        Route::post('/TaskType/{id}', [TaskTypeController::class, 'update'])->name('TaskType.update');
 
 
         //Funciones administrativas
-        Route::middleware(['checkrole:1'])->group(function () {
+        
             Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');
             Route::post('/usuarios/{id}', [UserController::class, 'update'])->name('usuario.update');
             Route::post('/usuario/{id}', [UserController::class, 'destroy'])->name('usuario.delete');
 
-            Route::get('/configuracion', [TaskTypeController::class, 'index'])->name('TaskType.index');
+        /*Route::get('/configuracion/servicios', [TaskTypeController::class, 'index'])->name('TaskType.index');*/
             Route::post('/configuracion/create', [TaskTypeController::class, 'create'])->name('TaskType.create');
-            Route::post('/configuracion/{id}', [TaskTypeController::class, 'update'])->name('TaskType.update');
             Route::post('/configuracion/delete/{id}', [TaskTypeController::class, 'destroy'])->name('TaskType.delete');
 
             Route::get('/reportes1', function () {
                 return Inertia::render('Reportes/reporte_Tasks', [
-                    'empresa' => Empresa::first(),
+                    'empresa' => Config::first(),
                 ]);
             });
             Route::get('/reportes2', function () {
                 return Inertia::render('Reportes/reporte_documentos', [
-                    'empresa' => Empresa::first(),
+                    'empresa' => Config::first(),
                 ]);
             });
 
             Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
+        
+        Route::middleware(['checkrole:1'])->group(function () {
+
         });
     });
 

@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empresa;
+use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use App\Models\TaskType;
+use App\Models\skill;
 
-class EmpresaController extends Controller
+class ConfigController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
         $mensaje = session('msj');
         if ($mensaje) {
             Session::forget('msj');
@@ -23,10 +25,13 @@ class EmpresaController extends Controller
         $empresa =  null;
 
         return Inertia::render('Mantenimiento/Index', [
-            'Tasktypes' => TaskType::where('status', '1')->get()->load('requisitos'),
+            'Tasktypes' => TaskType::where('status', '1')
+            ->with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
             'empresa' => null,
-            'msj' => $mensaje
-        ]);
+            'msj' => $mensaje,
+            'skills' => skill::all()
+        ]); 
+
     }
 
 
@@ -34,7 +39,7 @@ class EmpresaController extends Controller
     {
 
         try {
-            $empresa =  Empresa::find($id);
+            $empresa =  Config::find($id);
             $empresa->update($request->all());
             session()->put('msj', ["success" => 'Informacion guardada con exito']);
         } catch (\Exception $e) {

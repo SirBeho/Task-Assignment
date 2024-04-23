@@ -11,11 +11,13 @@ import Loading from '@/Components/Loading';
 
 
 
-export default function Usuarios({ auth, users, roles, msj }) {
+export default function Usuarios({ auth, users, roles, msj , skills }) {
 
+
+  const [selectedUser, setSelectedUser] = useState({});
+ 
   const [sortingData, setSortingData] = useState(users);
   const [searchValue, setSearchValue] = useState('');
-  const [selectedUser, setSelectedUser] = useState({});
   const [isCliente, setIsCliente] = useState();
   const [updateUser, setUpdateUser] = useState(false);
   const [deleteUser, setDeleteUser] = useState(false);
@@ -37,14 +39,17 @@ export default function Usuarios({ auth, users, roles, msj }) {
   }, [msj]);
 
   const { data, setData, post, reset } = useForm({
+    id: null,
     name: null,
     email: null,
     telefono: null,
     rnc: null,
     empresa: null,
     rol_id: null,
-    status: null
+    status: null,
+    skills: [],
   });
+
 
   const changeRol = (e) => {
 
@@ -65,8 +70,7 @@ export default function Usuarios({ auth, users, roles, msj }) {
     })
 
     setUpdateUser(true)
-    setSelectedUser(user[0])
-    setData('rol_id', user[0].rol_id)
+    setData(user[0])
 
   }
 
@@ -122,7 +126,7 @@ export default function Usuarios({ auth, users, roles, msj }) {
 
     setLoading(true);
 
-    post(route('usuario.update', selectedUser.id), {
+    post(route('usuario.update', data.id), {
 
       onSuccess: () => {
 
@@ -139,7 +143,7 @@ export default function Usuarios({ auth, users, roles, msj }) {
 
     setDeleteUser(false);
     setLoading(true);
-    post(route('usuario.delete', selectedUser.id), {
+    post(route('usuario.delete', data.id), {
       onSuccess: () => {
         setLoading(false);
         setSelectedUser({});
@@ -150,8 +154,16 @@ export default function Usuarios({ auth, users, roles, msj }) {
 
   };
 
+
   useEffect(() => {
-    setSortingData(users);
+      if (users) {
+        users.map((user) => {
+          user.habilidad = user.skills.map(item => {
+            return `${item.skill.skill_name}:${item.level}`;
+          }).join(',  ');
+        });
+        setSortingData(users);
+      } 
   }, [users])
 
   useEffect(() => {
@@ -161,8 +173,8 @@ export default function Usuarios({ auth, users, roles, msj }) {
   }, []);
 
   useEffect(() => {
-    setIsCliente(selectedUser.rol_id == 2)
-  }, [selectedUser])
+    setIsCliente(data.rol_id == 5)
+  }, [data])
 
   return (
 
@@ -191,13 +203,12 @@ export default function Usuarios({ auth, users, roles, msj }) {
         <EditUser
           data={data}
           roles={roles}
-          isCliente={isCliente}
           msj={msj}
           changeRol={changeRol}
           hideModal={() => setUpdateUser(false)}
           update={update}
           setData={setData}
-          selectedUser={selectedUser}
+          skills={skills}
         />
       </Modal>
 
@@ -283,6 +294,10 @@ export default function Usuarios({ auth, users, roles, msj }) {
                     </th>
                     <th
                       className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Habilidades
+                    </th>
+                    <th
+                      className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Status
                     </th>
                     <th
@@ -304,6 +319,11 @@ export default function Usuarios({ auth, users, roles, msj }) {
                         </td>
                         <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm">
                           <p className="text-gray-900 whitespace-no-wrap">{user.email}</p>
+                        </td>
+                        <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+                        <p className="text-gray-900 whitespace-no-wrap">
+                            {user.rol_id === 2 ? user.habilidad : ""}
+                        </p>
                         </td>
 
                         <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm">

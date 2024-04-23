@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empresa;
+use App\Models\Config;
 use App\Models\TaskStat;
 use App\Models\Task;
 use App\Models\TaskType;
@@ -21,7 +21,7 @@ class ReporteController extends Controller
             'TaskTypes' => TaskType::where('status', '1')->get(),
             'clientes' => User::where('status', '1')->where('rol_id', '2')->get(),
             'estados' => TaskStat::where('status', '1')->get(),
-            'empresa' => Empresa::first(),
+            'empresa' => Config::first(),
         ]);
     }
     public function dashboard()

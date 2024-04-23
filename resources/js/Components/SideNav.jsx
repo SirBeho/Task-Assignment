@@ -72,7 +72,7 @@ const navItems = [
         id: 9,
         icon: "/assets/svg/tools.svg",
         title: "CONFIG",
-        route:  route('empresa.index'),
+        route:  route('config.index'),
         rol:  [1,2,3]
 
     }

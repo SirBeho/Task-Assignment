@@ -1,21 +1,21 @@
 import { useForm } from '@inertiajs/react'
 import React, { useState } from 'react'
 
-export default function Empresa({ empresa, setLoading }) {
+export default function Config({ config, setLoading }) {
     
     const { data, setData, post } = useForm({
-        RNC: empresa.RNC || '',
-        empresa: empresa.empresa || '',
-        direccion: empresa.direccion || '',
-        telefono: empresa.telefono || '',
-        telefono2: empresa.telefono2 || '',
+        RNC: config.RNC || '',
+        config: config.config || '',
+        direccion: config.direccion || '',
+        telefono: config.telefono || '',
+        telefono2: config.telefono2 || '',
     });
 
     function submit(e) {
         e.preventDefault(); 
          
         setLoading(true)
-        post(route('empresa.update', 1), {
+        post(route('config.update', 1), {
             onSuccess: () => {
                 setLoading(false)
             }
@@ -24,17 +24,17 @@ export default function Empresa({ empresa, setLoading }) {
 
     return (
 
-        <form onSubmit={submit} className="flex flex-col gap-4 text-textgray px-10 pb-3">
+        <form onSubmit={submit} className="flex flex-col gap-4 text-textgray px-2 p-3">
 
             <div className='flex gap-8'>
 
                 <div className="flex flex-col w-3/5">
                     <label htmlFor="name" className="text-xs">
-                        name de la empresa
+                        name de la config
                     </label>
-                    <input type="text" name="empresa" id="empresa" className="h-9 rounded-md w-full outline-none"
-                        value={data.empresa}
-                        onChange={(e) => setData('empresa', e.target.value)}
+                    <input type="text" name="config" id="config" className="h-9 rounded-md w-full outline-none"
+                        value={data.config}
+                        onChange={(e) => setData('config', e.target.value)}
                     />
                 </div>
 

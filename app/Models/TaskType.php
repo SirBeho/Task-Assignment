@@ -11,6 +11,7 @@ class TaskType extends Model
 {
     use HasFactory;
     protected $table = "TaskTypes";
+    protected $fillable = ['type_name','description','estimated_time','status'];
 
 
     public function requisitos(): HasMany

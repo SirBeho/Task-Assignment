@@ -4,7 +4,7 @@ import { Pagination } from './Pagination';
 export function DataTable({ data, action, tbStructure, onNew, onUpdate, onDelete , onSee }) {
 
 
-console.log(data)
+
 
     const [filteredData, setFilteredData] = useState(data);
     const [currentPage, setCurrentPage] = useState(1);
@@ -62,8 +62,8 @@ console.log(data)
 
 
     return (
-        <>
-            <div className="my-2 flex sm:flex-row flex-col gap-4 items-center">
+        <div className='px-2'  >
+            <div className="my-2 m flex sm:flex-row flex-col gap-4 items-center">
 
                 <div className="block relative">
                     <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
@@ -162,6 +162,6 @@ console.log(data)
                 </div>
 
             </div>
-        </>
+        </div>
     )
 }

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Empresa;
+use App\Models\Config;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class EmpresaSeeder extends Seeder
+class ConfigSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class EmpresaSeeder extends Seeder
     public function run(): void
     {
       
-       Empresa::factory()->create([
+       Config::factory()->create([
         'RNC'=> '132706498',
         'empresa'=> 'Task Assignment SRL',
         'direccion'=> 'C/22A apto N1, Embrujo III, Santiago Rep. Dom.',
