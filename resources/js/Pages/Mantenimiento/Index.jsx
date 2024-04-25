@@ -14,9 +14,8 @@ import { useEffect, useState } from 'react';
 
 
 
-export default function Mantenimiento({ auth, Tasktypes, msj, config ,skills}) {
-
-
+export default function Mantenimiento({ configuracion, config ,auth, Tasktypes, msj, skills}) {
+   
   const  [menu, setMenu] = useState(0);
 
   const [currentData, setCurrentData] = useState(Tasktypes);
@@ -117,7 +116,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, config ,skills}) {
 
           {menu == 0 && 
             <Config
-              config={config}
+              config={configuracion}
               setLoading={setLoading}
             />
 
@@ -150,6 +149,8 @@ export default function Mantenimiento({ auth, Tasktypes, msj, config ,skills}) {
               hideModal={() => setEditTipoSilicitud(false)}
               setLoading={setLoading}
               skills={skills}
+              config={config}
+
             />
           }
  
@@ -178,6 +179,7 @@ export default function Mantenimiento({ auth, Tasktypes, msj, config ,skills}) {
                 <div className="bg-white p-4 rounded-lg w-1/2">
                   <ListSkills
                     selectedSkills={TaskTypeData?.requisitos}
+                    config={config}
                   />
                 </div>
 

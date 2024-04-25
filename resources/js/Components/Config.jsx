@@ -3,22 +3,22 @@ import React, { useState } from 'react'
 
 export default function Config({ config, setLoading }) {
     
-    const { data, setData, post } = useForm({
-        RNC: config.RNC || '',
-        config: config.config || '',
-        direccion: config.direccion || '',
-        telefono: config.telefono || '',
-        telefono2: config.telefono2 || '',
-    });
+    const { data, setData, post } = useForm(config);
+
 
     function submit(e) {
         e.preventDefault(); 
-         
-        setLoading(true)
-        post(route('config.update', 1), {
+
+        //setLoading(true)
+        post(route('config.update'), {
             onSuccess: () => {
-                setLoading(false)
+                //setLoading(false)
+            },
+            onError: (e) => {
+                //setLoading(false)
+                console.log(e.response.data)
             }
+
         });
     }
 
@@ -26,63 +26,26 @@ export default function Config({ config, setLoading }) {
 
         <form onSubmit={submit} className="flex flex-col gap-4 text-textgray px-2 p-3">
 
-            <div className='flex gap-8'>
+            <div className='flex gap-2 items-end'>
 
-                <div className="flex flex-col w-3/5">
-                    <label htmlFor="name" className="text-xs">
-                        name de la config
+                <span className='text-black text-lg font-semibold'>Rango de Habilidades: </span>
+                <div className="flex flex-col w-20 ">
+                    <label htmlFor="range_level_max" className="text-xs">
+                        Minimo
                     </label>
-                    <input type="text" name="config" id="config" className="h-9 rounded-md w-full outline-none"
-                        value={data.config}
-                        onChange={(e) => setData('config', e.target.value)}
+                    <input type="number" name="range_level_min" id="range_level_min" className="h-7 w-full rounded-[4px] outline-none px-2"
+                        value={data.range_level_min} placeholder='Min.'
+                        onChange={(e) => setData('range_level_min', e.target.value)}
                     />
                 </div>
-
-                <div className="flex flex-col w-2/5">
-                    <label htmlFor="telefono" className="text-xs">
-                        RNC
+                <span className='text-black '>hasta</span>
+                <div className="flex flex-col w-20 ">
+                <label htmlFor="range_level_max" className="text-xs">
+                        Maximo
                     </label>
-                    <input type="tel" name="telefono" id="telefono" className="h-9 rounded-md full outline-none px-2"
-                        value={data.RNC}
-                        onChange={(e) => setData('RNC', e.target.value)}
-                    />
-                </div>
-
-            </div>
-
-            <div className='flex gap-8'>
-
-                <div className="flex flex-col w-full">
-                    <label htmlFor="direccion" className="text-xs">
-                        Dirección
-                    </label>
-                    <input type="text" name="direccion" id="direccion" className="h-9 rounded-md w-full outline-none"
-                        value={data.direccion}
-                        onChange={(e) => setData('direccion', e.target.value)}
-                    />
-                </div>
-
-            </div>
-
-            <div className='flex gap-8'>
-
-                <div className="flex flex-col w-1/2">
-                    <label htmlFor="telefono" className="text-xs">
-                        Teléfono
-                    </label>
-                    <input type="tel" name="telefono" id="telefono" className="h-9 rounded-md w-full outline-none"
-                        value={data.telefono}
-                        onChange={(e) => setData('telefono', e.target.value)}
-                    />
-                </div>
-
-                <div className="flex flex-col w-1/2">
-                    <label htmlFor="telefono" className="text-xs">
-                        Teléfono
-                    </label>
-                    <input type="tel" name="telefono2" id="telefono2" className="h-9 rounded-md full outline-none px-2"
-                        value={data.telefono2}
-                        onChange={(e) => setData('telefono2', e.target.value)}
+                    <input type="number" name="range_level_max" id="range_level_max" className="h-6 w-full rounded-[4px]  outline-none px-2"
+                        value={data.range_level_max} placeholder='Máx.'
+                        onChange={(e) => setData('range_level_max', e.target.value)}
                     />
                 </div>
 

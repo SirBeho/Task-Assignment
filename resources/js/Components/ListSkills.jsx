@@ -5,12 +5,7 @@ import Progresbar from "./progresbar";
 const ListSkills = ({ selectedSkills,config  }) => {
 
 
-    config = {
-        rangelevel:{
-            min: 1,
-            max: 5
-        }
-    }
+    
 
     return (
         <div className="flex w-full h-full ">
@@ -32,8 +27,8 @@ const ListSkills = ({ selectedSkills,config  }) => {
                                     <td className="w-90 text-gray-800 ">{skill.skill.skill_name}</td>
                                     <td className="w-5">
                                     <Progresbar
-                                        min={config.rangelevel?.min}
-                                        max={config.rangelevel?.max}
+                                        min={config.rangeLevel?.min}
+                                        max={config.rangeLevel?.max}
                                         value={skill.level}
                                     ></Progresbar>
                                     </td>

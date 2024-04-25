@@ -11,6 +11,7 @@ export default function EditUser({
     msj,
     data,
     skills,
+    config,
 }) {
  
 
@@ -76,6 +77,7 @@ export default function EditUser({
                  selectedSkills={data?.skills}
                  setSelectedSkills={(skills) => setData("skills", skills)}
                  skills={skills}
+                 config={config}
              ></TransferList>
  
             )}

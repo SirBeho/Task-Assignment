@@ -17,13 +17,23 @@ class ShareConfigData
     public function handle(Request $request, Closure $next): Response
     {
 
-        $config = [
-            'key' => 'value',
-            // Agrega aquí más datos según necesites
+
+        // Obtenemos la configuración de la base de datos
+        $configuracion = \App\Models\Config::first();
+
+        // Creamos un array con los datos de la configuración
+        $config = [   
+            'rangeLevel' => [
+                'min' => $configuracion->range_level_min,
+                'max' => $configuracion->range_level_max
+            ],
         ];
+            
+       
 
         // Agregamos los datos a todas las respuestas de Inertia
         Inertia::share('config', $config);
+        Inertia::share('configuracion', $configuracion);
 
 
         return $next($request);

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Config extends Model
 {
     use HasFactory;
+    protected $table = "config";
+    public $timestamps = false;
+
     protected $fillable = [
-        'RNC',
-        'empresa',
-        'direccion',
-        'telefono',
-        'telefono2',
+        'range_level_min',
+        'range_level_max',
     ];
 }

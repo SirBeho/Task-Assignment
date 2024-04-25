@@ -10,6 +10,7 @@ export function EditTaskType({
     TaskTypeData,
     setLoading,
     skills,
+    config,
 }) { 
     const [mensaje, setMensaje] = useState(msj);
 
@@ -116,7 +117,9 @@ export function EditTaskType({
                     setSelectedSkills={(skills) =>
                         setData("requisitos", skills)
                     }
-                    skills={skills}
+                    skills={skills} 
+                     config={config}
+                    
                 ></TransferList>
 
                 {mensaje?.error && (

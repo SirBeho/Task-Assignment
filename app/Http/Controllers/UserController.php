@@ -42,7 +42,6 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-
         if (auth()->user()->rol_id == 1) {
         
             $user = User::findOrFail($request->id);

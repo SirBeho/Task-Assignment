@@ -6,12 +6,7 @@ import { sk } from "date-fns/locale";
 const TransferList = ({ selectedSkills,setSelectedSkills, skills , config  }) => {
 
 
-    config = {
-        rangelevel:{
-            min: 1,
-            max: 5
-        }
-    }
+   
 
     const [availableSkills, setAvailableSkills] = useState(
         skills?.filter((skill) =>
@@ -69,8 +64,8 @@ const TransferList = ({ selectedSkills,setSelectedSkills, skills , config  }) =>
                                     <td className="flex">
                                         
                                     <Progresbar
-                                        min={config.rangelevel?.min}
-                                        max={config.rangelevel?.max}
+                                        min={config.rangeLevel?.min}
+                                        max={config.rangeLevel?.max}
                                         value={skill.level}
                                         onChange={(newLevel) => {
                                             setSelectedSkills(

@@ -71,6 +71,8 @@ class TaskTypeController extends Controller
     public function update(Request $request)
     {
 
+        
+    
         try {
             $mensajes = [
                 'id.exists' => 'El id es invalido',
@@ -113,6 +115,7 @@ class TaskTypeController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'Error en la acción realizada'.$e], 500);
         }
+       
         return redirect(route('config.index'));
     }
 

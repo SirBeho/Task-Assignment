@@ -34,8 +34,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Accesos
     Route::match(['get', 'post'], '/AdmTasks', [TaskController::class, 'administracion'])->name('AdmTasks');
-    Route::get('/Tasks', [TaskController::class, 'index'])->name('Tasks');
-    Route::post('/Asignar', [TaskController::class, 'modelo'])->name('Asignar');
+    
+    
     Route::get('/panel', [TaskController::class, 'panel'])->name('panel');
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones');
     Route::post('/notificaciones/{id}/{n_id}', [NotificacionController::class, 'update'])->name('notificaciones.update');
@@ -68,13 +68,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/reportes/generar/docu', [ReporteController::class, 'documentos_exel']);
         Route::get('/dashboard', [ReporteController::class, 'dashboard'])->name('dashboard');
 
-
-
-        Route::get('/configuracion/servicios', [ConfigController::class, 'index'])->name('config.index');
-        Route::post('/configuracion/empresa/{id}', [ConfigController::class, 'update'])->name('config.update');
+        Route::get('/configuracion', [ConfigController::class, 'index'])->name('config.index');
+        Route::post('/configuracion', [ConfigController::class, 'update'])->name('config.update');
         Route::post('/TaskType/{id}', [TaskTypeController::class, 'update'])->name('TaskType.update');
 
 
+        Route::get('/Tasks', [TaskController::class, 'index'])->name('Tasks');
+        Route::post('/Asignar', [TaskController::class, 'modelo'])->name('TaskType.Asignar');
+
+        
         //Funciones administrativas
         
             Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');

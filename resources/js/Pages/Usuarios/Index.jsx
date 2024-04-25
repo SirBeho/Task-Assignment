@@ -11,9 +11,9 @@ import Loading from '@/Components/Loading';
 
 
 
-export default function Usuarios({ auth, users, roles, msj , skills }) {
+export default function Usuarios({ auth,config, users, roles, msj , skills }) {
 
-
+   console.log(config)
   const [selectedUser, setSelectedUser] = useState({});
  
   const [sortingData, setSortingData] = useState(users);
@@ -209,6 +209,7 @@ export default function Usuarios({ auth, users, roles, msj , skills }) {
           update={update}
           setData={setData}
           skills={skills}
+          config={config}
         />
       </Modal>
 

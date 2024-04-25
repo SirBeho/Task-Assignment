@@ -39,7 +39,7 @@ class TaskController extends Controller
         }
 
         return Inertia::render('Tasks/Index', [
-            'tipos' => TaskType::where('status', '1')->get()->load('requisitos'),
+            'taskTypes' => TaskType::where('status', '1')->with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
             'prioridades' => Priority::where('status', '1')->get(),
             'resultado' => $resultado,
             'msj' => $mensaje,
@@ -84,31 +84,45 @@ class TaskController extends Controller
 
         ]);
     }
+    
     public function modelo(Request $request)
     {
-        $usuarios = User::where("rol_id", 1)->get()->load('skills');
-        $requisitos = array_map('intval', $request->input('requisitos'));
 
-       
         
+        
+        $requisitos =  $request->input('requisitos');
+        
+        
+        $usuarios = User::where("rol_id", 2)->with(['skills' => 
+            function ($query) { $query->where('status', 1); }])->get();
+  
         $data = [];
 
         foreach ($usuarios as $usuario) {
             $habilidades = [];
-            foreach ($usuario['skills'] as $skill) {
-                $habilidades[] = $skill['level'];
+            
+            foreach ($requisitos as $requisito) {
+                foreach ($requisito as $idHabilidad => $nivel) {
+                    $habilidades[] = $usuario->skills->where('skill_id', $idHabilidad)->first()->level ?? 0;
+                }
             }
             $data[] = [
                 'id' => $usuario['id'],
                 'habilidades' => $habilidades
             ];
         }    
+
+        $requisitosTask = [];
+        foreach ($requisitos as $requisito) {
+            foreach ($requisito as $idHabilidad => $nivel) {
+                $requisitosTask[] = $nivel;
+            }
+        }
         
-    
         // Enviar los datos a un script de Python
         $response = Http::post('http://127.0.0.1:5000/calcular-exito', [
             'usuarios' => $data,
-            'requisitos' => $requisitos,
+            'requisitos' => $requisitosTask,
         ]);
 
 

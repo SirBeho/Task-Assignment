@@ -22,31 +22,32 @@ class ConfigController extends Controller
             Session::forget('msj');
         }
 
-        $empresa =  null;
-
         return Inertia::render('Mantenimiento/Index', [
-            'Tasktypes' => TaskType::where('status', '1')
-            ->with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
-            'empresa' => null,
+            'Tasktypes' => TaskType::with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
             'msj' => $mensaje,
             'skills' => skill::all()
         ]); 
 
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
+  
 
-    public function update(Request $request, $id)
-    {
+
+    public function update(Request $request)
+    {   
 
         try {
-            $empresa =  Config::find($id);
-            $empresa->update($request->all());
+            $Configuracion = Config::findOrFail($request->id);
+            $Configuracion->update($request->all());
             session()->put('msj', ["success" => 'Informacion guardada con exito']);
         } catch (\Exception $e) {
             session()->put('msj', ['error' => 'Error en la acción realizada']);
         }
 
-        return redirect(route('empresa.index'));
+        return redirect(route('config.index'));
 
     }
 }
