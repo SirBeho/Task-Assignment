@@ -283,6 +283,11 @@ export default function Usuarios({ auth,config, users, roles, msj , skills }) {
                   <tr>
                     <th
                       className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Foto
+                    </th>
+
+                    <th
+                      className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Usuario
                     </th>
                     <th
@@ -311,6 +316,15 @@ export default function Usuarios({ auth,config, users, roles, msj , skills }) {
                   {sortingData && (
                     sortingData.map((user, i) => (
                       <tr key={i}>
+                        <td className="px-5 py-3 border-b border-gray-200 bg-white text-base font-medium">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                              <img className="h-10 w-10 rounded-full object-cover" src={`./assets/users/user_${user.id}.jpg`} alt="./assets/user.png" />
+                            </div>
+                          </div>
+
+                        </td>
+
                         <td className="px-5 py-3 border-b border-gray-200 bg-white text-base font-medium">
                           {user.name}
                         </td>

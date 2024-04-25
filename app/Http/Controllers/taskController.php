@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
+use App\Models\TaskClasification;
+use App\Models\TaskClasificationLevel;
 
 class TaskController extends Controller
 {
@@ -40,7 +42,7 @@ class TaskController extends Controller
 
         return Inertia::render('Tasks/Index', [
             'taskTypes' => TaskType::where('status', '1')->with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
-            'prioridades' => Priority::where('status', '1')->get(),
+            'categorias' => TaskClasification::with('impact')->orderBy('impact_level')->get(),   
             'resultado' => $resultado,
             'msj' => $mensaje,
             'users' => User::all(),
@@ -66,6 +68,7 @@ class TaskController extends Controller
         }
 
         return Inertia::render('AdmTasks/Index', [
+            'Tasks' => Task::with(['cliente', 'usuarioAsignado', 'tipo','clasificacion.impact'])->orderBy('created_at', 'desc')->get(),
             'TaskTypes' => TaskType::where('status', '1')->get(),
             'statusList' => TaskStat::select('id', 'name')->where('status', 1)->get(),
             'msj' => $mensaje,
@@ -91,16 +94,26 @@ class TaskController extends Controller
         
         
         $requisitos =  $request->input('requisitos');
+        $prioridad =  $request->input('data.prioridad');
+
+        $work_queue = \App\Models\Config::first()->work_queue /100;
         
         
         $usuarios = User::where("rol_id", 2)->with(['skills' => 
-            function ($query) { $query->where('status', 1); }])->get();
-  
+            function ($query) { $query->where('status', 1); },'Tasks.tipo'])->get();
+        
+
         $data = [];
 
+
         foreach ($usuarios as $usuario) {
-            $habilidades = [];
-            
+
+            $cola_trabajo = 0;
+            foreach ($usuario->tasks as $tarea) {
+                $cola_trabajo += $tarea->tipo->estimated_time;
+            }
+
+            $habilidades = [];         
             foreach ($requisitos as $requisito) {
                 foreach ($requisito as $idHabilidad => $nivel) {
                     $habilidades[] = $usuario->skills->where('skill_id', $idHabilidad)->first()->level ?? 0;
@@ -108,9 +121,13 @@ class TaskController extends Controller
             }
             $data[] = [
                 'id' => $usuario['id'],
-                'habilidades' => $habilidades
+                'habilidades' => $habilidades,
+                'cola_trabajo' => ($cola_trabajo*((100-$prioridad)/100))*$work_queue,
+
             ];
         }    
+
+              
 
         $requisitosTask = [];
         foreach ($requisitos as $requisito) {
@@ -118,6 +135,8 @@ class TaskController extends Controller
                 $requisitosTask[] = $nivel;
             }
         }
+        
+
         
         // Enviar los datos a un script de Python
         $response = Http::post('http://127.0.0.1:5000/calcular-exito', [
@@ -136,9 +155,10 @@ class TaskController extends Controller
 
     public function create(Request $request)
     {   
-
+            
+        
         try {
-            $request->merge([
+           /*  $request->merge([
                 // 'user_id' => Auth::user()->id,
                 'status_id' => 1,
             ]);
@@ -153,56 +173,18 @@ class TaskController extends Controller
                 'tipo_id.exists' => 'El tipo de Task seleccionado no es válido.',
                 'user_id.exists' => 'El usuario seleccionado no es válido.',
                 'descripcion.required' => 'La descripción es obligatoria.',
-            ]);
-
-
-
-            if ($validator->fails()) {
+            ]); */
+           /*  if ($validator->fails()) {
                 session()->put('msj', ['error' => array_values($validator->errors()->messages())]);
 
                 return back();
             }
-
+            */
             $Task = Task::create($request->all());
+            session()->put('msj', ["success" => 'Tarea creada Correctamente', "id" => $Task->id]);
 
-            $request->merge([
-                'Task_id' =>  $Task->id,
-            ]);
-
-            if ($request->tipo_id > 2) {
-                Notificacion::create(
-                    [
-                        'Task_id' =>  $Task->id,
-                        'emisor_id' => Auth::user()->id,
-                        'message' => "Has recibido una nueva Task"
-                    ]
-                );
-            }
-
-
-            if($request->created_at){
-               
-                $request->merge([
-                    'descripcion' => "Se ha creado el bloque de " . ($request->tipo_id == 1 ? "Compras" : "Ventas") . " " . $request->descripcion,
-                ]);
-                
-            }else{
-                $soli = Task::find($request->Task_id);
-                $request->merge([
-                    'descripcion' => "Se ha creado la Task Numero: ".$soli->numero,
-                ]);
-            }
-
-
-            // $log = new LogTaskController();
-
-            // $respuesta = $log->create($request);
-
-            session()->put('msj', ["success" => $request->descripcion, "id" => $Task->id]);
-
-            //  return response()->json(['msj' => 'Task creada correctamente','log' => $respuesta->original['msj']], 200);
         } catch (ModelNotFoundException $e) {
-            session()->put('msj', ["error" => 'No se pudo registrar la Task']);
+            session()->put('msj', ["error" => 'No se pudo registrar la Task'.$e]);
         } catch (QueryException $e) {
 
             $errormsj = $e->getMessage();
@@ -219,15 +201,13 @@ class TaskController extends Controller
                     session()->put('msj', ["error" => "No se puede realizar la acción, el valor '$duplicateValue' está duplicado"], 422);
                 }
             } else {
-                session()->put('msj', ["error" => 'No se pudo registrar el Task']);
+                session()->put('msj', ["error" => 'No se pudo registrar el Task'.$errormsj]);
             }
         } catch (Exception $e) {
             session()->put('msj', ["error" => 'Error en la accion realizada']);
         }
 
-        if (isset($request->created_at)) {
-            return redirect('panel');
-        }
+        
         return redirect('Tasks');
     }
 

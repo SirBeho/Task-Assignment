@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
         ]);
 
         // // Envía la notificación por correo electrónico
-        $user->notify(new UserCreatedNotification($password));
+        //$user->notify(new UserCreatedNotification($password));
 
         session()->put('msj', ["success" => 'Usuario registrado con exito']);
         return redirect(route('usuarios.index'));

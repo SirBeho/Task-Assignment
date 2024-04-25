@@ -27,6 +27,7 @@ class ShareConfigData
                 'min' => $configuracion->range_level_min,
                 'max' => $configuracion->range_level_max
             ],
+            'work_queue' => $configuracion->work_queue,
         ];
             
        

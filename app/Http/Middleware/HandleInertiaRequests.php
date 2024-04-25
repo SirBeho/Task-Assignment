@@ -51,7 +51,7 @@ class HandleInertiaRequests extends Middleware
                 );
             } else {
                 $user = auth()->user();
-                $user['Tasks'] = Task::all()->load('tipo', 'status', 'user', 'files.user', 'comentarios', 'userAsignado');
+                $user['Tasks'] = Task::all();
             }
         }
 

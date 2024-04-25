@@ -69,6 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserSkill::class,'user_id');
     }
+
+    
+    
     
 
 }

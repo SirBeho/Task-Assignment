@@ -33,7 +33,6 @@ Route::get('/', [AuthenticatedSessionController::class, 'create']);
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Accesos
-    Route::match(['get', 'post'], '/AdmTasks', [TaskController::class, 'administracion'])->name('AdmTasks');
     
     
     Route::get('/panel', [TaskController::class, 'panel'])->name('panel');
@@ -52,7 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Funciones Basicas
     Route::post('upload', [FileController::class, 'upload'])->name('upload');
     Route::post('/download', [FileController::class, 'download'])->name('download');
-    Route::post('/Tasks/create', [TaskController::class, 'create'])->name('Task.create');
+    
     Route::post('/Tasks/update', [TaskController::class, 'update'])->name('Task.update');
     Route::post('/panel/destroy/{id}', [TaskController::class, 'destroy'])->name('Task.destroy');
 
@@ -75,8 +74,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/Tasks', [TaskController::class, 'index'])->name('Tasks');
         Route::post('/Asignar', [TaskController::class, 'modelo'])->name('TaskType.Asignar');
+        Route::post('/Tasks/create', [TaskController::class, 'create'])->name('Task.create');
+        Route::match(['get', 'post'], '/AdmTasks', [TaskController::class, 'administracion'])->name('AdmTasks');
 
-        
         //Funciones administrativas
         
             Route::get('/usuarios', [UserController::class, 'index'])->name('usuarios.index');

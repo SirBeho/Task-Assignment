@@ -33,7 +33,7 @@ def calcular_distancias():
                 # Penalizar habilidades peores que las requeridas
                 distancia_ajustada += (0.5 * (tarea[j] - habilidad_usuario))
 
-        distancias_ajustadas.append({'id': usuarios[i]["id"], 'distancia': round(distancia_ajustada, 2)})
+        distancias_ajustadas.append({'id': usuarios[i]["id"], 'distancia': round(distancia_ajustada+usuarios[i]["cola_trabajo"], 2)})
 
 
     # Devolver los resultados como respuesta

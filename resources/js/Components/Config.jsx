@@ -30,7 +30,7 @@ export default function Config({ config, setLoading }) {
 
                 <span className='text-black text-lg font-semibold'>Rango de Habilidades: </span>
                 <div className="flex flex-col w-20 ">
-                    <label htmlFor="range_level_max" className="text-xs">
+                    <label htmlFor="range_level_min" className="text-xs">
                         Minimo
                     </label>
                     <input type="number" name="range_level_min" id="range_level_min" className="h-7 w-full rounded-[4px] outline-none px-2"
@@ -50,6 +50,20 @@ export default function Config({ config, setLoading }) {
                 </div>
 
             </div>
+
+            <label className='flex gap-2 items-end'>
+
+                <span className='text-black text-lg font-semibold'>Ponderacion cola de trabajo:</span>
+                <div className="flex flex-col w-20 ">
+                   
+                    <input type="number" name="work_queue" id="work_queue" className="h-7 w-full rounded-[4px] outline-none px-2"
+                        value={data.work_queue} placeholder='Min.'
+                        onChange={(e) => setData('work_queue', e.target.value)}
+                    />
+                </div>
+                
+
+            </label>
 
             <div className='flex justify-end'>
                 <button type='submit' className="border py-1 w-36 rounded-xl bg-blue-500 hover:bg-blue-600 text-offwhite self-end justify-end mr-5 mt-5">

@@ -17,7 +17,15 @@ export default function EditUser({
 
     return (
         <form onSubmit={update} className="flex flex-col gap-4 text-textgray">
-            <div className="flex gap-8">
+           
+            <div className="flex gap-8 items-end">
+               
+            <div className="h-20 w-20 rounded-full border overflow-hidden">
+                              <img className="h-full w-full object-contain " src={`./assets/users/user_${data.id}.jpg`} alt="./assets/user.png" />
+                    </div>  
+               
+
+                    
                 <div className="flex flex-col w-3/5">
                     <label htmlFor="name" className="text-xs">
                         Nombre
@@ -33,7 +41,11 @@ export default function EditUser({
                     />
                 </div>
 
-                <div className="flex flex-col w-2/5">
+                
+            </div>
+
+            <div className="flex gap-8">
+            <div className="flex flex-col w-2/5">
                     <label htmlFor="telefono" className="text-xs">
                         Número contacto
                     </label>
@@ -47,9 +59,6 @@ export default function EditUser({
                         onChange={(e) => setData("telefono", e.target.value)}
                     />
                 </div>
-            </div>
-
-            <div className="flex gap-8">
                 <div className="flex flex-col w-2/4">
                     <label htmlFor="rol_id" className="text-xs">
                         Rol             

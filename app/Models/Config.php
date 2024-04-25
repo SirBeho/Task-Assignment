@@ -14,5 +14,6 @@ class Config extends Model
     protected $fillable = [
         'range_level_min',
         'range_level_max',
+        'work_queue',
     ];
 }
