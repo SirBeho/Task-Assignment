@@ -99,7 +99,7 @@ export function DataTable({
             <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 pt-4 overflow-x-auto">
             
                 <div className="inline-block min-w-full shadow rounded-lg overflow-hidden bg-slate-100">
-                {title && <span className="block w-full text-center text-xl text-gray-800 black font-semibold border-b">{title}</span> }
+                    {title && <span className="block w-full text-center text-xl text-gray-800 black font-semibold border-b">{title}</span> }
                     <table className="min-w-full leading-normal overflow-hidden">
                         
                         <thead>
@@ -118,7 +118,7 @@ export function DataTable({
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody className="bg-white">
                             {slicedData &&
                                 slicedData.map((val, index) => (
                                     <tr key={index}>
@@ -126,7 +126,7 @@ export function DataTable({
                                             key == "status" ? (
                                                 <td
                                                     key={i}
-                                                    className="px-5 py-3 border-b border-gray-200 bg-white text-base font-medium"
+                                                    className="px-5 py-3 border-b border-gray-200  text-base font-medium"
                                                 >
                                                     {val.status == 0 ? (
                                                         <span className="bg-red-300 px-2 rounded-lg">
@@ -143,7 +143,7 @@ export function DataTable({
                                             key == "color_label" ? (
                                                 <td
                                                     key={i}
-                                                    className="px-5 py-3 border-b border-gray-200 bg-white text-base font-medium"
+                                                    className="px-5 py-3 border-b border-gray-200 text-base font-medium"
                                                 >
                                                 <span className={`block w-12 rounded-md h-6 bg-${val.color_label}`}></span>
                                                 </td>
@@ -152,7 +152,7 @@ export function DataTable({
                                             (
                                                 <td
                                                     key={i}
-                                                    className="px-5 py-3 border-b border-gray-200 bg-white text-base font-medium"
+                                                    className="px-5 py-3 border-b border-gray-200  text-base font-medium"
                                                 >
                                                     {key
                                                         .split(".")
@@ -170,7 +170,7 @@ export function DataTable({
                                         )}
 
                                         {action && (
-                                            <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm">
+                                            <td className="px-5 py-3 border-b border-gray-200  text-sm">
                                                 <div className="flex gap-4">
                                                     <span
                                                         className="cursor-pointer"

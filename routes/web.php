@@ -70,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/configuracion', [ConfigController::class, 'index'])->name('config.index');
         Route::post('/configuracion', [ConfigController::class, 'update'])->name('config.update');
         Route::post('/TaskType/{id}', [TaskTypeController::class, 'update'])->name('TaskType.update');
+        Route::post('/TaskType', [TaskTypeController::class, 'updatelevel'])->name('SkillLevel.update');
 
 
         Route::get('/Tasks', [TaskController::class, 'index'])->name('Tasks');

@@ -24,55 +24,65 @@ export default function Config({ config, setLoading }) {
 
     return (
 
-        <form onSubmit={submit} className="flex flex-col gap-4 text-textgray px-2 p-3">
-
-            <div className='flex gap-2 items-end'>
-
-                <span className='text-black text-lg font-semibold'>Rango de Habilidades: </span>
-                <div className="flex flex-col w-20 ">
-                    <label htmlFor="range_level_min" className="text-xs">
-                        Minimo
-                    </label>
-                    <input type="number" name="range_level_min" id="range_level_min" className="h-7 w-full rounded-[4px] outline-none px-2"
-                        value={data.range_level_min} placeholder='Min.'
-                        onChange={(e) => setData('range_level_min', e.target.value)}
-                    />
-                </div>
-                <span className='text-black '>hasta</span>
-                <div className="flex flex-col w-20 ">
-                <label htmlFor="range_level_max" className="text-xs">
-                        Maximo
-                    </label>
-                    <input type="number" name="range_level_max" id="range_level_max" className="h-6 w-full rounded-[4px]  outline-none px-2"
-                        value={data.range_level_max} placeholder='Máx.'
-                        onChange={(e) => setData('range_level_max', e.target.value)}
-                    />
-                </div>
-
-            </div>
-
-            <label className='flex gap-2 items-end'>
-
-                <span className='text-black text-lg font-semibold'>Ponderacion cola de trabajo:</span>
-                <div className="flex flex-col w-20 ">
-                   
-                    <input type="number" name="work_queue" id="work_queue" className="h-7 w-full rounded-[4px] outline-none px-2"
-                        value={data.work_queue} placeholder='Min.'
-                        onChange={(e) => setData('work_queue', e.target.value)}
-                    />
-                </div>
-                
-
+        <form onSubmit={submit} className="flex flex-col gap-4 text-gray-700 px-2 p-3">
+        <div className="flex gap-2 items-end">
+          <span className="text-lg font-semibold">Rango de Habilidades:</span>
+          <div className="flex flex-col w-20">
+            <label htmlFor="range_level_min" className="text-xs">
+              Mínimo
             </label>
-
-            <div className='flex justify-end'>
-                <button type='submit' className="border py-1 w-36 rounded-xl bg-blue-500 hover:bg-blue-600 text-offwhite self-end justify-end mr-5 mt-5">
-                    Guardar
-                </button>
-            </div>
-
-        </form>
-
+            <input
+              type="number"
+              name="range_level_min"
+              id="range_level_min"
+              className="h-7 w-full rounded-md border border-gray-300 px-2 outline-none"
+              value={data.range_level_min}
+              placeholder="Mín."
+              onChange={(e) => setData("range_level_min", e.target.value)}
+            />
+          </div>
+          <span>hasta</span>
+          <div className="flex flex-col w-20">
+            <label htmlFor="range_level_max" className="text-xs">
+              Máximo
+            </label>
+            <input
+              type="number"
+              name="range_level_max"
+              id="range_level_max"
+              className="h-7 w-full rounded-md border border-gray-300 px-2 outline-none"
+              value={data.range_level_max}
+              placeholder="Máx."
+              onChange={(e) => setData("range_level_max", e.target.value)}
+            />
+          </div>
+        </div>
+      
+        <div className="flex gap-2 items-center">
+          <span className="text-lg font-semibold">Ponderación cola de trabajo:</span>
+          <div className="flex flex-col w-20">
+            <input
+              type="number"
+              name="work_queue"
+              id="work_queue"
+              className="h-7 w-full rounded-md border border-gray-300 px-2 outline-none"
+              value={data.work_queue}
+              placeholder="Ponderación"
+              onChange={(e) => setData("work_queue", e.target.value)}
+            />
+          </div>
+        </div>
+      
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition duration-300"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+      
 
     )
 }

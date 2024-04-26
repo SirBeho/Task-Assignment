@@ -16,4 +16,9 @@ class TaskTypeSkill extends Model
     {
         return $this->BelongsTo(Skill::class,'skill_id');
     }
+
+    public function nivel(): BelongsTo
+    {
+        return $this->belongsTo(TypeLevel::class,'level');
+    }
 }

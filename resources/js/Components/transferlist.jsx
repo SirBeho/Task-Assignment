@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import Progresbar from "./progresbar";
 import { sk } from "date-fns/locale";
 
-const TransferList = ({ selectedSkills,setSelectedSkills, skills , config  }) => {
+const TransferList = ({ selectedSkills,setSelectedSkills, skills , config , SkillsLevels  }) => {
 
-
-   
+    
 
     const [availableSkills, setAvailableSkills] = useState(
         skills?.filter((skill) =>
@@ -64,6 +63,7 @@ const TransferList = ({ selectedSkills,setSelectedSkills, skills , config  }) =>
                                     <td className="flex">
                                         
                                     <Progresbar
+                                        labels={SkillsLevels}
                                         min={config.rangeLevel?.min}
                                         max={config.rangeLevel?.max}
                                         value={skill.level}

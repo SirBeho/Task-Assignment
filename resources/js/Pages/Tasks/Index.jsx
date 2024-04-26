@@ -17,6 +17,7 @@ export default function Tasks({
     categorias,
     resultado,
     users,
+    SkillsLevels
 }) {
     const [show, setShow] = useState(msj != null);
     const [selectedTask, setSelectedTask] = useState({});
@@ -28,6 +29,9 @@ export default function Tasks({
     const [color, setColor] = useState("gray-500");
     const [loading, setLoading] = useState(false);
 
+   
+
+    config.rangeLevel.max = SkillsLevels.length;
 
 
     useEffect(() => {
@@ -100,7 +104,7 @@ export default function Tasks({
             })
             .then((response) => {
                 console.log(response.data)
-                return;
+
                 const sortedData = response.data.sort(
                     (a, b) => a.distancia - b.distancia
                 );
@@ -399,6 +403,7 @@ export default function Tasks({
                                 <ListSkills
                                     selectedSkills={selectedTask?.requisitos}
                                     config={config}
+                                    labels={SkillsLevels}
                                 />
                             </div>
                         </div>

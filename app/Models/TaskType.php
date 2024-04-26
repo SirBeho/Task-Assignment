@@ -19,6 +19,8 @@ class TaskType extends Model
         return $this->hasMany(TaskTypeSkill::class,'task_type_id');
     }
 
+   
+
 }
 
 

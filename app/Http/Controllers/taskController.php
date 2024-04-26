@@ -8,6 +8,7 @@ use App\Models\Priority;
 use App\Models\Task;
 use App\Models\TaskType;
 use App\Models\User;
+use App\Models\TypeLevel;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -46,6 +47,7 @@ class TaskController extends Controller
             'resultado' => $resultado,
             'msj' => $mensaje,
             'users' => User::all(),
+            'SkillsLevels' => TypeLevel::all(),
 
         ]);
     }
@@ -116,7 +118,7 @@ class TaskController extends Controller
             $habilidades = [];         
             foreach ($requisitos as $requisito) {
                 foreach ($requisito as $idHabilidad => $nivel) {
-                    $habilidades[] = $usuario->skills->where('skill_id', $idHabilidad)->first()->level ?? 0;
+                    $habilidades[] = ($usuario->skills->where('skill_id', $idHabilidad)->first()->level ?? 0)/2;
                 }
             }
             $data[] = [

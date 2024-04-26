@@ -11,7 +11,14 @@ export function EditTaskType({
     setLoading,
     skills,
     config,
+    SkillsLevels,
 }) { 
+
+    config.rangeLevel.max = SkillsLevels.length;
+
+   
+
+
     const [mensaje, setMensaje] = useState(msj);
 
     useEffect(() => {
@@ -119,6 +126,7 @@ export function EditTaskType({
                     }
                     skills={skills} 
                      config={config}
+                     SkillsLevels={SkillsLevels }
                     
                 ></TransferList>
 

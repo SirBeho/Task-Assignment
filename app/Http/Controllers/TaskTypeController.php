@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use App\Models\skill;
+use App\Models\TypeLevel;
 
 class TaskTypeController extends Controller
 {
@@ -118,6 +119,28 @@ class TaskTypeController extends Controller
        
         return redirect(route('config.index'));
     }
+
+    public function updatelevel(Request $request)
+    { 
+        try {
+           
+            $TaskType = TypeLevel::findOrFail($request->id);
+            $TaskType->update($request->all());
+
+             session()->put('msj', ["success" => 'Usuario actializado con exito']);
+
+            session()->put('msj', ["success" => 'Tarea actializada con exito']);
+
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'El TaskType ' . $request->id . ' no existe no fue encontrado'], 404);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Error en la acción realizada'.$e], 500);
+        }
+       
+        return redirect(route('config.index'));
+    }
+
 
     public function destroy($id)
     {

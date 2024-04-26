@@ -10,6 +10,7 @@ use App\Models\TaskType;
 use App\Models\TaskClasification;
 use App\Models\TaskClasificationLevel;
 use App\Models\skill;
+use App\Models\TypeLevel;
 
 class ConfigController extends Controller
 {
@@ -25,7 +26,8 @@ class ConfigController extends Controller
         }
 
         return Inertia::render('Mantenimiento/Index', [
-            'Tasktypes' => TaskType::with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill'])->get(),
+            'Tasktypes' => TaskType::with(['requisitos' => function ($query) { $query->where('status', 1);},'requisitos.skill','requisitos.nivel'])->get(),
+            'SkillsLevels' => TypeLevel::all(),
             'Clasifications' => TaskClasification::with('impact')->get(),   
             'ClassificationsLeves' => TaskClasificationLevel::all(),
             'msj' => $mensaje,

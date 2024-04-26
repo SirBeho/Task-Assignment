@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Progresbar from "./progresbar";
 
-const ListSkills = ({ selectedSkills,config  }) => {
+const ListSkills = ({ selectedSkills,config ,labels }) => {
 
-
+    console.log(labels)
     
 
     return (
@@ -30,6 +30,7 @@ const ListSkills = ({ selectedSkills,config  }) => {
                                         min={config.rangeLevel?.min}
                                         max={config.rangeLevel?.max}
                                         value={skill.level}
+                                        labels={labels}
                                     ></Progresbar>
                                     </td>
                                    

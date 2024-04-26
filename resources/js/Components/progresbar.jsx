@@ -1,10 +1,10 @@
 import { min } from "date-fns";
 import React, { useEffect, useState } from "react";
 
-const Progresbar = ({ min = 0 , max = 100, value ,onChange  }) => {
-  
+const Progresbar = ({ min = 0 , max = 100, value ,onChange,labels  }) => {
+    
 
-
+   
 
     const addsubstract = (num) => {
         if(value+num <= max && value+num >= min){
@@ -22,7 +22,7 @@ const Progresbar = ({ min = 0 , max = 100, value ,onChange  }) => {
                
                 <div className="relative overflow-hidden h-full text-xs flex rounded bg-blue-200 w-full ">
                 <span className="absolute left-1  text-sm font-semibold inline-block ">
-                            {value}
+                            {labels?.find((level) => level.id === value).name ?? value}
                         </span>
                     <div
                         style={{ width: `${(value/max)*100}%` }}

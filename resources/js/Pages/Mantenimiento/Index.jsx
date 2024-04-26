@@ -1,6 +1,7 @@
 import { DataTable } from "@/Components/DataTable";
 import DeleteUser from "@/Components/DeleteUser";
 import { EditTaskType } from "@/Components/EditTaskType";
+import { EditSkillLevel } from "@/Components/EditSkillLevel";
 import ListSkills from "@/Components/ListSkills";
 import Config from "@/Components/Config";
 import Loading from "@/Components/Loading";
@@ -20,6 +21,7 @@ export default function Mantenimiento({
     skills,
     Clasifications,
     ClassificationsLeves,
+    SkillsLevels,
 }) {
     const [menu, setMenu] = useState(0);
 
@@ -29,22 +31,27 @@ export default function Mantenimiento({
     const [newTipoSilicitud, setNewTipoSilicitud] = useState(false);
     const [editTipoSilicitud, setEditTipoSilicitud] = useState(false);
     const [TaskTypeData, setTaskTypeData] = useState();
+    const [levelData, setLevelData] = useState();
     const [succesAlert, setSuccesAlert] = useState(msj?.success);
     const [loading, setLoading] = useState(false);
+    const [editSkillLevel, setEditSkillLevel] = useState(false);
 
     const { post } = useForm({});
 
     
+    
     useEffect(() => {
         setSuccesAlert(msj?.success != undefined);
     }, [msj]);
+
+    console.log(Tasktypes)
 
     useEffect(() => {
         if (Tasktypes) {
             Tasktypes.map((TaskType) => {
                 TaskType.requisito = TaskType.requisitos
                     .map((item) => {
-                        return `${item.skill.skill_name}:${item.level}`;
+                        return `${item.skill.skill_name}:${item.nivel.name}`;
                     })
                     .join(",  ");
             });
@@ -69,6 +76,12 @@ export default function Mantenimiento({
       "Nivel de impacto": "name",
       "Valor Ponderado": "value",
       "color": "color_label"
+    };
+
+  const tbPonderacionLevel = {
+    "Nivel": "name",
+    "Valor minimo": "min",
+    "Valor Maximo": "max"
   };
     
 
@@ -90,6 +103,16 @@ export default function Mantenimiento({
     const editModal = (id) => {
         getTaskTypeData(id);
         setEditTipoSilicitud(true);
+    };
+
+    const editLevel = (id) => {
+       
+        const data = SkillsLevels.filter((level) => level.id === id);
+
+       
+        setLevelData(data[0]);
+        
+        setEditSkillLevel(true);
     };
 
     function destroy(e) {
@@ -161,6 +184,7 @@ export default function Mantenimiento({
                     )}
 
                     {menu == 1 && (
+                        <>
                         <DataTable
                             data={currentData}
                             action={true}
@@ -169,6 +193,28 @@ export default function Mantenimiento({
                             onUpdate={editModal}
                             onDelete={deleteModal}
                             onSee={seeModal}
+                        />
+
+                        <DataTable
+                            data={SkillsLevels}
+                            action={true}
+                            tbStructure={tbPonderacionLevel}
+                            title={"Niveles de habilidades"}
+                            onUpdate={editLevel}
+                        />
+
+                        </>
+                    )}
+
+                    {editSkillLevel && (
+                        <EditSkillLevel
+                            show={editSkillLevel}
+                            TaskTypeData={levelData}
+                            hideModal={() => setEditSkillLevel(false)}
+                            setLoading={setLoading}
+                            skills={skills}
+                            config={config}
+                            onUpdate={editModal}
                         />
                     )}
 
@@ -206,6 +252,7 @@ export default function Mantenimiento({
                             setLoading={setLoading}
                             skills={skills}
                             config={config}
+                            SkillsLevels={SkillsLevels}
                         />
                     )}
 
