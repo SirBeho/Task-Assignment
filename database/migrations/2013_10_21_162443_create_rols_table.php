@@ -13,12 +13,25 @@ class CreateRolsTable extends Migration
      */
     public function up()
     {
+
+        schema::create('config', function (Blueprint $table) {
+            $table->id();
+            $table->integer('range_level_min');
+            $table->integer('range_level_max');
+            $table->string('work_queue');
+
+            $table->timestamps();
+        });
+        
         Schema::create('rols', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('status')->default(1);
             $table->timestamps();
         });
+
+        //tabla config
+     
     }
 
     /**
@@ -29,5 +42,6 @@ class CreateRolsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('rols');
+        Schema::dropIfExists('config');
     }
 }

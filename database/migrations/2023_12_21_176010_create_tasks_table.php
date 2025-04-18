@@ -34,7 +34,22 @@ class CreateTasksTable extends Migration
                 $table->foreign('task_type_id')->references('id')->on('TaskTypes');
                 $table->foreign('status_id')->references('id')->on('Task_status');
             
-        });
+             });
+                /* [ 'cliente_id', 'task_type_id', 'task_clasification_id', 'descripcion', 'user_id', ];*/
+             Schema::create('task_list', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('cliente_id');
+                $table->unsignedBigInteger('task_type_id');
+                $table->unsignedBigInteger('task_clasification_id');
+                $table->text('descripcion');
+                $table->unsignedBigInteger('user_id');
+                $table->timestamps();
+                $table->foreign('cliente_id')->references('id')->on('users');
+                $table->foreign('task_type_id')->references('id')->on('TaskTypes');
+                $table->foreign('user_id')->references('id')->on('users');
+                
+            
+             });
     }
 
     /**

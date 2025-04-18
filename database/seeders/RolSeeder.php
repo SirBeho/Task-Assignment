@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Rol;
+use App\Models\Config;
 use Illuminate\Database\Seeder;
 
 class RolSeeder extends Seeder
@@ -29,6 +30,11 @@ class RolSeeder extends Seeder
             'name' => 'User',
         ]);
 
+        Config::factory()->create([
+            'range_level_min' => 1,
+            'range_level_max' => 5,
+            'work_queue' => 'queue'
+        ]);
       
         
 
